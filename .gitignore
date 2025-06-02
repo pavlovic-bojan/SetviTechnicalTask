@@ -1,0 +1,25 @@
+# IDE konfiguracije
+.idea/
+.vscode/
+.anima/
+
+# OS fajlovi
+.DS_Store
+Thumbs.db
+
+# Env fajlovi
+.env
+.env.*    # ako koristiš .env.development, .env.local, itd.
+
+# Node
+node_modules/
+
+# Logovi
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+build/
+out/
