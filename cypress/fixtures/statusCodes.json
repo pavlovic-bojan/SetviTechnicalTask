@@ -1,0 +1,67 @@
+{
+  "SUCCESS": {
+    "httpStatus": 200,
+    "apiStatus": "Succeeded",
+    "isSuccess": true
+  },
+  "SUCCESS2": {
+    "httpStatus": 200,
+    "apiStatus": "Succeeded",
+    "isSuccess": true
+  },
+  "CREATED": {
+    "httpStatus": 201,
+    "apiStatus": "Created",
+    "isSuccess": true
+  },
+  "NO_CONTENT": {
+    "httpStatus": 204,
+    "apiStatus": "NoContent",
+    "isSuccess": true
+  },
+  "BAD_REQUEST": {
+    "httpStatus": 400,
+    "apiStatus": "BadRequest",
+    "isSuccess": false
+  },
+  "UNAUTHORIZED": {
+    "httpStatus": 401,
+    "apiStatus": "Unauthorized",
+    "isSuccess": false
+  },
+  "FORBIDDEN": {
+    "httpStatus": 403,
+    "apiStatus": "Forbidden",
+    "isSuccess": false
+  },
+  "NOT_FOUND": {
+    "httpStatus": 404,
+    "apiStatus": "NotFound",
+    "isSuccess": false
+  },
+  "METHOD_NOT_ALLOWED": {
+    "httpStatus": 405,
+    "apiStatus": "MethodNotAllowed",
+    "isSuccess": false
+  },
+  "CONFLICT": {
+    "httpStatus": 409,
+    "apiStatus": "Conflict",
+    "isSuccess": false
+  },
+  "UNPROCESSABLE_ENTITY": {
+    "httpStatus": 422,
+    "apiStatus": "UnprocessableEntity",
+    "isSuccess": false
+  },
+  "INTERNAL_SERVER_ERROR": {
+    "httpStatus": 500,
+    "apiStatus": "InternalServerError",
+    "isSuccess": false
+  },
+  "SERVICE_UNAVAILABLE": {
+    "httpStatus": 503,
+    "apiStatus": "ServiceUnavailable",
+    "isSuccess": false
+  }
+}

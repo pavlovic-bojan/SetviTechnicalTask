@@ -23,3 +23,17 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('postApi', (endpoint, body, options = {}) => {
+    return cy.request({
+        method: 'POST',
+        url: Cypress.env('API_URL') + endpoint,
+        body,
+        failOnStatusCode: options.failOnStatusCode ?? true,
+        headers: {
+            Authorization: Cypress.env('API_KEY'),
+            'Content-Type': 'application/json',
+            accept: 'text/plain',
+        }
+    })
+})

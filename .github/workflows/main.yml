@@ -20,22 +20,31 @@ jobs:
     container: cypress/browsers:latest
     permissions:
       contents: write
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+      API_URL: ${{ secrets.API_URL }}
 
     steps:
       - name: Check if not on gh-pages branch
         if: ${{ github.ref != 'refs/heads/gh-pages' }}
         run: echo "Not on gh-pages branch, proceeding with the workflow."
+
       - name: Split branch names
         id: split_branches
         run: echo "::set-output name=branches::$(echo ${{ github.event.inputs.branches }} | tr -s ',' '\n')"
+
       - name: Checkout branches
         uses: actions/checkout@v2
         with:
           ref: ${{ steps.split_branches.outputs.branches }}
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v2
         with:
           command: npm run cy:run
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          API_URL: ${{ secrets.API_URL }}
 
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
