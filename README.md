@@ -21,6 +21,7 @@ Go to [Actions](https://github.com/pavlovic-bojan/SetviTechnicalTask/actions), t
 npm ci
 ```
 ### Run Cypress test locally in the terminal
+* In the root folder, there is a .env.example file. If you want to run the project locally, you need to rename it to .env and fill it in with your own data.
 ```bash
 npm run cy:run
 ```
