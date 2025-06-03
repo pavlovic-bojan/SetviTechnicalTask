@@ -1,0 +1,52 @@
+name: Setvi Technical Task
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      branches:
+        description: 'Branches to test (comma-separated)'
+        required: true
+
+jobs:
+  cypress-e2e:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check if not on gh-pages branch
+        if: ${{ github.ref != 'refs/heads/gh-pages' }}
+        run: echo "Not on gh-pages branch, proceeding with the workflow."
+      - name: Split branch names
+        id: split_branches
+        run: echo "::set-output name=branches::$(echo ${{ github.event.inputs.branches }} | tr -s ',' '\n')"
+      - name: Checkout branches
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.split_branches.outputs.branches }}
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
+        with:
+          command: npm run cy:run
+
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results
+
+      - name: Deploy report to Github Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v2
+        env:
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: allure-report

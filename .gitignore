@@ -23,3 +23,12 @@ yarn-error.log*
 dist/
 build/
 out/
+
+# Cypress output
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+
+# Allure output
+allure-results/
+allure-report/

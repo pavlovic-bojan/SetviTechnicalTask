@@ -1,0 +1,24 @@
+{
+  "name": "setvitechnicaltask",
+  "version": "1.0.0",
+  "description": "Setvi Technical Task",
+  "main": "index.js",
+  "scripts": {
+    "cy:run": "cypress run",
+    "allure:generate": "allure generate allure-results --clean",
+    "allure:open": "allure open allure-report",
+    "allure:clear": "rm -rf allure-results allure-report || true",
+    "test:all": "npm run allure:clear && npm run cy:run && npm run allure:generate && npm run allure:open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-personal:pavlovic-bojan/SetviTechnicalTask.git"
+  },
+  "author": "Bojan Pavlovic bojanpavlovicoffice@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "@shelex/cypress-allure-plugin": "^2.41.2",
+    "allure-commandline": "^2.34.0",
+    "cypress": "^14.4.0"
+  }
+}
