@@ -4,11 +4,6 @@
     "apiStatus": "Succeeded",
     "isSuccess": true
   },
-  "SUCCESS2": {
-    "httpStatus": 200,
-    "apiStatus": "Succeeded",
-    "isSuccess": true
-  },
   "CREATED": {
     "httpStatus": 201,
     "apiStatus": "Created",

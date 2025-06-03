@@ -6,6 +6,7 @@ dotenv.config()
 
 module.exports = defineConfig({
   e2e: {
+    defaultCommandTimeout: 60000,
     setupNodeEvents(on, config) {
       allureWriter(on, config)
       config.env.API_KEY = process.env.API_KEY

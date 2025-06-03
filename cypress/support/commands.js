@@ -34,6 +34,6 @@ Cypress.Commands.add('postApi', (endpoint, body, options = {}) => {
             Authorization: Cypress.env('API_KEY'),
             'Content-Type': 'application/json',
             accept: 'text/plain',
-        }
+        },
     })
 })
