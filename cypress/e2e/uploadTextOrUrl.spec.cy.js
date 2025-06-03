@@ -2,7 +2,7 @@ import UploadTextOrUrl from '../modules/UploadTextOrUrl'
 
 const uploadTextOrUrl = new UploadTextOrUrl()
 
-describe('UploadFreeText API tests - individual - valid inputs', () => {
+describe('UploadTextOrUrl API tests - individual - valid inputs', () => {
     const validInputs = ['input1', 'input2', 'input3', 'input4']
 
     validInputs.forEach(inputKey => {
@@ -22,7 +22,7 @@ describe('UploadFreeText API tests - individual - valid inputs', () => {
     })
 })
 
-describe('UploadFreeText API tests - individual - invalid inputs', () => {
+describe('UploadTextOrUrl API tests - individual - invalid inputs', () => {
     it(`should upload text and validate failure response with invalid input5`, () => {
         const meta = uploadTextOrUrl.inputMeta.input5
         const { endpointKey, statusKey } = uploadTextOrUrl.getResolvedApiAndStatus(meta, 0)
@@ -37,7 +37,7 @@ describe('UploadFreeText API tests - individual - invalid inputs', () => {
     })
 })
 
-describe('UploadFreeText API tests - only valid combinations', () => {
+describe('UploadTextOrUrl API tests - only valid combinations', () => {
     const validCombinations = uploadTextOrUrl.getValidInputApiCombinations()
 
     validCombinations.forEach(([inputKey, apiKey]) => {
