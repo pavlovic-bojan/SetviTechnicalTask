@@ -15,7 +15,7 @@ on:
         required: true
 
 jobs:
-  cypress-e2e:
+  cypress-setvi-technical-task:
     runs-on: ubuntu-latest
     container: cypress/browsers:latest
     permissions:
