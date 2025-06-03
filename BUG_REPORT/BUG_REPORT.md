@@ -4,30 +4,29 @@
 
 ---
 
-### 1. ✅ API returns `isSuccess: false` with `error_code: "Unauthorized"` despite valid API key
+### 1. ✅ API returns duplicated items in the result list
 
-- **Title**: API returns unauthorized error even with valid key
-- **Environment**: `POST /api/rfq/upload-free-text` at `intelligence-dev.setvi.com`
-- **Steps to Reproduce**:
-    1. Send request with valid `ApiKey` header
-    2. Provide valid JSON body with `text` field
-- **Actual Result**: `isSuccess: false`, `error_code: "Unauthorized"`, HTTP 200
-- **Expected Result**: `isSuccess: true`, successful processing
-- **Severity**: Medium
-- **Priority**: High
+- **Title**: API returns duplicate items in search results  
+- **Environment**: Both `/search` and `/query` endpoints  
+- **Steps to Reproduce**:  
+    1. Send a search request that matches multiple items  
+- **Actual Result**: Response contains duplicated entries in the results list  
+- **Expected Result**: Response contains only unique items without duplicates  
+- **Severity**: Low  
+- **Priority**: Medium  
 
 ---
 
-### 2. ✅ API accepts unescaped special characters in `text`
+### 2. ✅ API silently ignores unknown query parameters
 
-- **Title**: API accepts text with unescaped quotes
-- **Environment**: `/api/rfq/upload-free-text`
-- **Steps to Reproduce**:
-    1. Send text with quotes like `"Choice 24" x 18" x 1/2" Green Polyethylene Cutting Board"`
-- **Actual Result**: API returns 200 OK, processes text
-- **Expected Result**: Accept only properly escaped or return validation error
-- **Severity**: Low
-- **Priority**: Medium
+- **Title**: API ignores unknown query parameters without any warning or error  
+- **Environment**: All endpoints that accept query parameters  
+- **Steps to Reproduce**:  
+    1. Send request with unsupported or unknown query parameters  
+- **Actual Result**: API processes request successfully but ignores unknown parameters silently  
+- **Expected Result**: API returns validation error or warning about unsupported parameters  
+- **Severity**: Informational  
+- **Priority**: Low  
 
 ---
 
