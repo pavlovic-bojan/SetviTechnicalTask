@@ -73,12 +73,12 @@
 
 ---
 
-### 1. ❌ API returns HTTP 200 even with empty or invalid request body
+### 1. ❌ API returns HTTP 200 even with invalid data text
 
-- **Title**: Empty input accepted as valid
+- **Title**: invalid data input accepted as valid
 - **Environment**: `/api/rfq/upload-url-html`
 - **Steps to Reproduce**:
-    1. Send empty JSON `{}` or empty `"url": ""`
+    1. Send invalid data in text JSON
 - **Actual Result**: HTTP 200 OK, `isSuccess: true` but no useful result
 - **Expected Result**: HTTP 400 Bad Request with error details
 - **Severity**: High
@@ -86,52 +86,78 @@
 
 ---
 
-### 2. ❌ Invalid URLs do not return error
+### 2. ❌ API accepts requests without required headers and returns HTTP 200
 
-- **Title**: Invalid URL strings processed without validation error
-- **Environment**: `/api/rfq/upload-url-html`
-- **Steps to Reproduce**:
-    1. Send `"url": "htp://invalid-url"`
-- **Actual Result**: 200 OK, vague response
-- **Expected Result**: HTTP 400 with descriptive error
-- **Severity**: Medium
-- **Priority**: Medium
-
----
-
-### 3. ❌ Missing required fields do not trigger validation errors
-
-- **Title**: Missing `text` or `url` field accepted silently
-- **Environment**: `/upload-free-text` and `/upload-url-html`
-- **Steps to Reproduce**:
-    1. Send request without `text` or without `url`
-- **Actual Result**: `isSuccess: true` but no data processed
-- **Expected Result**: Validation error and HTTP 400 response
-- **Severity**: High
+- **Title**: Missing authentication headers not rejected properly  
+- **Environment**: All protected API endpoints  
+- **Steps to Reproduce**:  
+    1. Send a request to any protected endpoint (e.g. `/api/rfq/upload-free-text`)  
+    2. Omit both `Authorization` and `ApiKey` headers  
+- **Actual Result**:  
+    - The API responds with `HTTP 200 OK`  
+    - Response may include a vague "unauthorized" message or even `isSuccess: true`  
+- **Expected Result**:  
+    - API should return `HTTP 401 Unauthorized`  
+    - Response body should contain a clear error message like `Missing or invalid authentication headers`  
+- **Severity**: High  
 - **Priority**: High
 
 ---
 
-### 4. ❌ Malformed JSON accepted with HTTP 200
+### 3. ❌ API treats request with both `ApiKey` and `Authorization` headers as authorized, but rejects request with only `ApiKey`
 
-- **Title**: Invalid JSON not rejected
-- **Environment**: Any endpoint
-- **Steps to Reproduce**:
-    1. Send request with broken JSON syntax
-- **Actual Result**: 200 OK, empty or null response
-- **Expected Result**: HTTP 400 with JSON parse error
-- **Severity**: Medium
-- **Priority**: Medium
+- **Title**: API requires `Authorization` header format, ignores or rejects `ApiKey` header alone  
+- **Environment**: All endpoints requiring authentication  
+- **Steps to Reproduce**:  
+    1. Send request with header:  
+       `ApiKey: a7a91f48-0371-4680-b69d-7928d9c1c9ad`  
+       → API returns HTTP 200 with unauthorized message (not authorized)  
+    2. Send request with both headers:  
+       `ApiKey: a7a91f48-0371-4680-b69d-7928d9c1c9ad`  
+       `Authorization: ApiKey a7a91f48-0371-4680-b69d-7928d9c1c9ad`  
+       → API returns HTTP 200 and treats user as authorized  
+- **Actual Result**: API accepts only requests with `Authorization` header in format `ApiKey <key>`. Requests with only `ApiKey` header are rejected as unauthorized, but when both headers are sent, API treats request as authorized.  
+- **Expected Result**: Consistent authentication handling. Either accept `ApiKey` header alone or clearly reject and document that only `Authorization` header with `ApiKey` prefix is accepted. Do not mix behaviors depending on presence of both headers.  
+- **Severity**: Medium  
+- **Priority**: Medium  
 
 ---
 
-### 5. ❌ API key header is case-sensitive causing unauthorized errors
+### 4. ❌ API returns HTTP 200 OK for oversized request payload
 
-- **Title**: Header name must be exactly `ApiKey`
-- **Environment**: All API endpoints
-- **Steps to Reproduce**:
-    1. Send API key header as `apikey` or `Authorization`
-- **Actual Result**: Unauthorized error with 200 status
-- **Expected Result**: Clear documentation or case-insensitive header handling, plus HTTP 401 status
-- **Severity**: Medium
+- **Title**: API does not reject overly large `text` input  
+- **Environment**: `/api/rfq/upload-free-text`  
+- **Steps to Reproduce**:  
+    1. Send POST request with `text` field containing very large string (e.g., 2MB of characters)  
+- **Actual Result**: HTTP 200 OK returned, request accepted silently without error  
+- **Expected Result**: HTTP 413 Payload Too Large or HTTP 400 Bad Request with descriptive error message  
+- **Severity**: Medium  
 - **Priority**: Medium  
+
+---
+
+### 5. ❌ API accepts `topK` as a string without validation
+
+- **Title**: `topK` parameter accepts string values silently  
+- **Environment**: `/api/rfq/upload-url-html`, `/api/rfq/upload-free-text`  
+- **Steps to Reproduce**:
+    1. Send request with `topK` as a string:
+       ```json
+       {
+         "url": "https://www.webstaurantstore.com/choice-24-x-18-x-1-2-green-polyethylene-cutting-board/40724185GN.html",
+         "topK": "3",
+         "threshold": 0.8,
+         "enablePrivateLabelRanking": false,
+         "enableStockProductRanking": false,
+         "enableVendorRanking": false
+       }
+       ```
+- **Actual Result**:  
+    - API returns `HTTP 200 OK`  
+    - `isSuccess: true`  
+    - No validation error, even though `topK` is a string instead of a number  
+- **Expected Result**:  
+    - API should return `HTTP 400 Bad Request`  
+    - Error message like: "`topK` must be a number"  
+- **Severity**: Medium  
+- **Priority**: Medium
